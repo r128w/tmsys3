@@ -1,10 +1,77 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8" />
-    <title>greetings</title>
-</head>
-<body>
-    <p>say gex</p>
-</body>
+  <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width,initial-scale=1" />
+      <title>TMSys3</title>
+      <script src="https://unpkg.com/realm-web/dist/bundle.iife.js"></script>
+
+      <style>
+        .taskContainer {background-color: #111;padding:8px;margin:8px;}
+
+        .taskName {margin:0px;width:fit-content;background-color:#111;color:#fff;font-size:large;font-family:monospace;width:60%;border:none;margin-bottom:3px;}
+        .taskDescription {margin:0px;width:fit-content;background-color:#111;color:#fff;font-family:monospace;width:60%;border:none;}
+        .taskButton {float:right;margin-left:4px;background-color: #aaa;font-family:monospace}
+
+        .hidden {display:none;}
+
+        textarea {resize:none;}
+
+      </style>
+
+  </head>
+  <body style = "background-color: #111; color: #fff;font-family:monospace" spellcheck="false">
+
+    <script src="./test.js"></script>
+
+
+    <div style="width: 100%; text-align: center; "><!-- title, centered -->
+      <h1 style="font-family: monospace;margin-bottom:8px">TMSys3</h1>
+    </div>
+
+    <div id="passwordBox" contenteditable="true" style="margin-left:auto;margin-right:auto;margin-bottom:12px;max-width:20%;min-width: 100px;text-align: center;background-color: #151515;font-size:large">/</div>
+
+    <div style="min-width:40%;max-width:800px;margin-left:auto;margin-right:auto;"><!-- columns w tasks n all that jazz-->
+
+      <div style="width:48%;float:left;background-color: #222;padding:0px;" id="todoColumn">
+
+        <div class="taskContainer hidden" id="sampleTodo" style="margin-bottom:0px;">
+
+          <button class="taskButton" onclick="whatchuWant(this)">x</button>
+          <button class="taskButton" onclick="whatchuWant(this)">↓</button>
+          <button class="taskButton" onclick="whatchuWant(this)">↑</button>
+          <button class="taskButton" onclick="whatchuWant(this)">Done</button>
+
+          <div class="taskName" contenteditable="true" onkeyup="innaPhantom(this)">Task Name</div>
+          <div class="taskDescription" contenteditable="true" onkeyup="innaPhantom(this)">description...</div>
+      
+        </div>
+
+        <button id = "addTask" onclick="whatchuWant(this)" style="margin:8px;margin-left:10%;width:80%;height:30px;font-family:monospace;font-size:large;border:none;background-color:#111;color:#fff"><b>+</b></button>
+        
+      </div>
+
+      <div style="width:48%;float:right;background: #1a1a1a;padding:0px;" id="doneColumn">
+        <div class="taskContainer hidden" id="sampleDone">
+
+          <button class="taskButton" onclick="whatchuWant(this)">x</button>
+          <button class="taskButton" onclick="whatchuWant(this)">↓</button>
+          <button class="taskButton" onclick="whatchuWant(this)">↑</button>
+          <button class="taskButton" onclick="whatchuWant(this)">Undo</button>
+
+          <div class="taskName" contenteditable="true" onkeyup="innaPhantom(this)">Task Name</div>
+          <div class="taskDescription" contenteditable="true" onkeyup="innaPhantom(this)">description...</div>
+      
+        </div>
+      </div>
+
+    </div>
+
+    <div style="width:20%; margin-left: auto; margin-right: auto; text-align: center;position:fixed;bottom:0px;left:40%"> <!-- center along bottom, update button and info -->
+      <button onclick="iGotWhite()" style="background-color: #222;color:#fff;font-family:monospace">Update</button> 
+      <p id="updateTimeRead" style="font-size: x-small;margin:4px;">Read took N/A ms</p>
+      <p id="updateTimeWrite" style="font-size: x-small;margin:4px;">Write took N/A ms</p>
+    </div>
+
+  </body>
 </html>
