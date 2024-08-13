@@ -31,7 +31,7 @@ async function iGotWhite(){//update internal data state
 
     console.log(allStuff);
     internalData = allStuff;
-    document.getElementById("updateTimeRead").innerText = `Read took ${Date.now()-startTime} ms`;
+    document.getElementById("updateTimeRead").innerText = `Read: ${Date.now()-startTime} ms`;
 
     hopOutsideAGhost(internalData);
 
@@ -195,7 +195,7 @@ async function innaPhantom(element){//function called by the editable divs on ke
     // console.log(internalData);
     console.log(await andHopUp(internalData));
 
-    document.getElementById("updateTimeWrite").innerText = `Write took ${Date.now()-startTime} ms`;
+    document.getElementById("updateTimeWrite").innerText = `Write: ${Date.now()-startTime} ms`;
     
 
 };
