@@ -162,7 +162,11 @@ async function hopOutsideAGhost(rawJSON){//display the json input to the webpage
 };
 
 async function andHopUp(stuff){//write function
-    if(await user_global.functions.writeAll(stuff, document.getElementById("passwordBox").innerText.replace("<br>", "")) != "Write successful"){
+
+      var processedPassword = document.getElementById("passwordBox").innerText;
+      processedPassword = processedPassword.replace("<br>", "");
+      processedPassword = processedPassword.replace("\n", "");
+    if(await user_global.functions.writeAll(stuff, processedPassword) != "Write successful"){
         alert("401 - Unauthorized. Write to MongoDB unsuccessful.");
         return "Failed. lmao";
     }else{
