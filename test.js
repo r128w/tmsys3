@@ -8,6 +8,8 @@ const credentials = Realm.Credentials.anonymous();
 
 var user_global;
 
+var lastUpdated;
+
 async function iGotBlack(){
       // Create an anonymous credential
       // Authenticate the user
@@ -31,7 +33,9 @@ async function iGotWhite(){//update internal data state
 
     console.log(allStuff);
     internalData = allStuff;
+
     document.getElementById("updateTimeRead").innerText = `Read: ${Date.now()-startTime} ms`;
+    blowohoh();
 
     hopOutsideAGhost(internalData);
 
@@ -112,6 +116,7 @@ async function whatchuWant(element){// update the list and data, write
     }
 
     document.getElementById("updateTimeWrite").innerText = `Write: ${Date.now()-startTime} ms`;
+    blowohoh();
 
 };
 
@@ -200,8 +205,48 @@ async function innaPhantom(element){//function called by the editable divs on ke
     console.log(await andHopUp(internalData));
 
     document.getElementById("updateTimeWrite").innerText = `Write: ${Date.now()-startTime} ms`;
+    blowohoh();
     
 
 };
+
+var timerID = "none yet!";
+
+function iKnowImBoutta(){//update the time elapsed since last update text
+
+    let timeElapsed = Date.now() - lastUpdated;
+
+    let displayString = `${timeElapsed} ms`;
+
+    let selfExecuteDelay = 9;// ms until next call of this function (recursive updating) (starts at 10 ms, but increases with time)
+
+    if(timeElapsed > 999){
+        displayString = `${Math.floor(timeElapsed/1000)} s`;
+        selfExecuteDelay = 999;
+        if(timeElapsed > 59999){
+            displayString = `${Math.floor(timeElapsed/60000)} m`;
+            selfExecutedelay = 9999;
+            if(timeElapsed > 3599999){
+                selfExecuteDelay = 999999;
+                displayString = `${Math.floor(timeElapsed/3600000)} h`;
+            }
+        }
+    }
+    displayString = "Last updated: " + displayString;
+
+    document.getElementById("updateTimeElapsed").innerText = displayString;
+
+    console.log("Ping!");
+
+    timerID = setTimeout(iKnowImBoutta, selfExecuteDelay);
+
+}
+
+function blowohoh() {
+    lastUpdated = Date.now();
+    if(timerID != "none yet!"){clearTimeout(timerID);}// clear the update loop
+    iKnowImBoutta();// start the loop fresh
+    console.log("Resetting timeElapsed loop");
+}
 
 iGotWhite();
