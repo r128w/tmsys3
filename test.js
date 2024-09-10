@@ -111,7 +111,7 @@ async function whatchuWant(element){// update the list and data, write
         }
     }
 
-    document.getElementById("updateTimeWrite").innerText = `Write took ${Date.now()-startTime} ms`;
+    document.getElementById("updateTimeWrite").innerText = `Write: ${Date.now()-startTime} ms`;
 
 };
 
