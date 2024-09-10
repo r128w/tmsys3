@@ -29,7 +29,11 @@ async function iGotWhite(){//update internal data state
     const startTime = Date.now();
     await iGotBlack();
 
-    const allStuff = await user_global.functions.readAll();
+
+      var processedPassword = document.getElementById("passwordBox").innerText;
+      processedPassword = processedPassword.replace("<br>", "");
+      processedPassword = processedPassword.replace("\n", "");
+    const allStuff = await user_global.functions.readAll(processedPassword);
 
     console.log(allStuff);
     internalData = allStuff;
