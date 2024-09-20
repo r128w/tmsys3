@@ -10,6 +10,11 @@ var user_global;
 
 var lastUpdated;
 
+var instantWrite = false;// whether or not to write every update
+//if true, writes will be pushed on page update
+//if false, writes will be pushed once every 30 seconds, provided there has been an update
+var needWrite = false;
+
 async function iGotBlack(){
       // Create an anonymous credential
       // Authenticate the user
@@ -119,8 +124,6 @@ async function whatchuWant(element){// update the list and data, write
         }
     }
 
-    document.getElementById("updateTimeWrite").innerText = `Write: ${Date.now()-startTime} ms`;
-    blowohoh();
 
 };
 
@@ -172,14 +175,21 @@ async function hopOutsideAGhost(rawJSON){//display the json input to the webpage
 
 async function andHopUp(stuff){//write function
 
-      var processedPassword = document.getElementById("passwordBox").innerText;
-      processedPassword = processedPassword.replace("<br>", "");
-      processedPassword = processedPassword.replace("\n", "");
+
+    if(instantWrite){
+
+    var processedPassword = document.getElementById("passwordBox").innerText;
+    processedPassword = processedPassword.replace("<br>", "");
+    processedPassword = processedPassword.replace("\n", "");
     if(await user_global.functions.writeAll(stuff, processedPassword) != "Write successful"){
         alert("401 - Unauthorized. Write to MongoDB unsuccessful.");
         return "Failed. lmao";
     }else{
         return "Write success";
+    }
+    }else{// mark modification as in order
+        needWrite = true;
+        return "Marked as needing write";
     }
 };
 
@@ -207,9 +217,6 @@ async function innaPhantom(element){//function called by the editable divs on ke
     hopOutsideAGhost(internalData);
     // console.log(internalData);
     console.log(await andHopUp(internalData));
-
-    document.getElementById("updateTimeWrite").innerText = `Write: ${Date.now()-startTime} ms`;
-    blowohoh();
     
 
 };
@@ -229,7 +236,7 @@ function iKnowImBoutta(){//update the time elapsed since last update text
         selfExecuteDelay = 999;
         if(timeElapsed > 59999){
             displayString = `${Math.floor(timeElapsed/60000)} m`;
-            selfExecutedelay = 9999;
+            selfExecuteDelay = 9999;
             if(timeElapsed > 3599999){
                 selfExecuteDelay = 999999;
                 displayString = `${Math.floor(timeElapsed/3600000)} h`;
@@ -251,6 +258,38 @@ function blowohoh() {
     if(timerID != "none yet!"){clearTimeout(timerID);}// clear the update loop
     iKnowImBoutta();// start the loop fresh
     console.log("Resetting timeElapsed loop");
+}
+
+function iAintDumb(){// calls read every update of the passwordBox - because read update overlap is not problematic (unlike write)
+    iGotWhite();
+    //redundant function for "clarity"
+    //flickers if password is incorrect, but otherwise fine
+}
+
+async function theyTrynaStealMyFlow(){// recurring update timer (if instantWrite == false)
+    console.log("Write update ping");
+    if(needWrite){//copied from andHopUp()
+        startTime = Date.now();
+        var processedPassword = document.getElementById("passwordBox").innerText;
+        processedPassword = processedPassword.replace("<br>", "");
+        processedPassword = processedPassword.replace("\n", "");
+        if(await user_global.functions.writeAll(internalData, processedPassword) != "Write successful"){
+            alert("401 - Unauthorized. Write to MongoDB unsuccessful.");
+            return "Write failed. lmao";
+        }else{
+            needWrite = false;
+
+            document.getElementById("updateTimeWrite").innerText = `Write: ${Date.now()-startTime} ms`;
+            blowohoh();
+
+            return "Write success";
+        }
+    }else{console.log("No write");}
+    setTimeout(theyTrynaStealMyFlow, 15000);// shouldnt be too resource intensive, because of the single bool check on idle
+}
+
+if(instantWrite == false){
+    theyTrynaStealMyFlow();
 }
 
 iGotWhite();
