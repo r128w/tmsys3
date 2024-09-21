@@ -187,7 +187,7 @@ async function andHopUp(stuff){//write function
     }else{
         return "Write success";
     }
-    }else{// mark modification as in order
+    }else{// mark modification is in order
         needWrite = true;
         return "Marked as needing write";
     }
@@ -197,24 +197,26 @@ var IPcalls = 0;//innaPhantom calls
 // this function is called for all editable divs, meaning that editing two in quick succession will be broken... sucks ig
 async function innaPhantom(element){//function called by the editable divs on keyup
     // console.log("ping!");
-    IPcalls++;
-    // this function, if called and then not called for another three seconds, sends a write request through andHopUp. if it is called twice in quick succession, it still only sends one request (to prevent overlap)
-    var old = IPcalls;
-    for(var i = 0;i<30;i++){
-    await new Promise(r => setTimeout(r, 100));//100 ms delay
-        if(IPcalls!=old){
-            return;
-        }
-    }
+
+    // dont need call time check anymore, since write overlap shouldnt be an issue anymore
+    // IPcalls++;
+    // // this function, if called and then not called for another three seconds, sends a write request through andHopUp. if it is called twice in quick succession, it still only sends one request (to prevent overlap)
+    // var old = IPcalls;
+    // for(var i = 0;i<10;i++){
+    // await new Promise(r => setTimeout(r, 100));//100 ms delay
+    //     if(IPcalls!=old){
+    //         return;
+    //     }
+    // }
 
     // console.log("write!");
     console.log(`Write request - text input - received from ${element}`);
-    const startTime = Date.now();
+    // const startTime = Date.now();
 
     //sick one-liner
     internalData[((element.parentNode.parentNode.id == "todoColumn") ? "todo" : "done")][Array.from(element.parentNode.parentNode.children).indexOf(element.parentNode)-1][(element.className == "taskName" ? "name" : "description")] = element.innerText;
 
-    hopOutsideAGhost(internalData);
+    // hopOutsideAGhost(internalData); // no need to run display on every edit, as each edit already edits the display
     // console.log(internalData);
     console.log(await andHopUp(internalData));
     
@@ -247,7 +249,7 @@ function iKnowImBoutta(){//update the time elapsed since last update text
 
     document.getElementById("updateTimeElapsed").innerText = displayString;
 
-    console.log("Ping!");
+    console.log("Time since update ping");
 
     timerID = setTimeout(iKnowImBoutta, selfExecuteDelay);
 
@@ -285,7 +287,7 @@ async function theyTrynaStealMyFlow(){// recurring update timer (if instantWrite
             return "Write success";
         }
     }else{console.log("No write");}
-    setTimeout(theyTrynaStealMyFlow, 15000);// shouldnt be too resource intensive, because of the single bool check on idle
+    setTimeout(theyTrynaStealMyFlow, 60000);// shouldnt be too resource intensive, because of the single bool check on idle
 }
 
 if(instantWrite == false){
