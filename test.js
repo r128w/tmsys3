@@ -269,7 +269,7 @@ function iAintDumb(){// calls read every update of the passwordBox - because rea
 }
 
 async function theyTrynaStealMyFlow(){// recurring update timer (if instantWrite == false)
-    console.log("Write update ping");
+    console.log("<> Write update ping");
     if(needWrite){//copied from andHopUp()
         startTime = Date.now();
         var processedPassword = document.getElementById("passwordBox").innerText;
@@ -287,7 +287,7 @@ async function theyTrynaStealMyFlow(){// recurring update timer (if instantWrite
             return "Write success";
         }
     }else{console.log("No write");}
-    setTimeout(theyTrynaStealMyFlow, 60000);// shouldnt be too resource intensive, because of the single bool check on idle
+    setTimeout(theyTrynaStealMyFlow, 15000);// shouldnt be too resource intensive, because of the single bool check on idle
 }
 
 if(instantWrite == false){
