@@ -277,14 +277,14 @@ async function theyTrynaStealMyFlow(){// recurring update timer (if instantWrite
         processedPassword = processedPassword.replace("\n", "");
         if(await user_global.functions.writeAll(internalData, processedPassword) != "Write successful"){
             alert("401 - Unauthorized. Write to MongoDB unsuccessful.");
-            return "Write failed. lmao";
+            console.log("Write failed. lmao");
         }else{
             needWrite = false;
 
             document.getElementById("updateTimeWrite").innerText = `Write: ${Date.now()-startTime} ms`;
             blowohoh();
 
-            return "Write success";
+            console.log("Write success");
         }
     }else{console.log("No write");}
     setTimeout(theyTrynaStealMyFlow, 15000);// shouldnt be too resource intensive, because of the single bool check on idle
