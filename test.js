@@ -111,13 +111,18 @@ async function whatchuWant(element){// update the list and data, write
                 console.log(await andHopUp(internalData));
             }
             // else{console.log("USER used UP! Nothing happened!");}
-        }else if(element.innerText=="+"){
+        }else if(element.innerText=="+" || element.innerText=="^"){
             var newTask = {};
             newTask["name"] = "New Task";
             newTask["description"] = "Description";
             newTask["timestamp"] = Math.floor(Date.now() / 1000);
 
-            internalData["todo"].push(newTask);
+            internalData["todo"].push(newTask); // adds to bottom of tasklist
+            if(element.innerText == "^"){// swap w top
+                const first = internalData["todo"][0];
+                internalData["todo"][0] = internalData["todo"][internalData["todo"].length-1];
+                internalData["todo"][internalData["todo"].length-1] = first;
+            }
             hopOutsideAGhost(internalData);
             // console.log(internalData);
             console.log(await andHopUp(internalData));
@@ -137,6 +142,7 @@ async function hopOutsideAGhost(rawJSON){//display the json input to the webpage
     const doneColumn = document.getElementById("doneColumn");
 
     const addTaskElement = document.getElementById("addTask");
+    const extraAddButton = document.getElementById("addTaskAlt");
 
     todoColumn.innerHTML="";
     doneColumn.innerHTML="";
@@ -170,6 +176,7 @@ async function hopOutsideAGhost(rawJSON){//display the json input to the webpage
 
 
     todoColumn.appendChild(addTaskElement);// readd the button at the bottom
+    todoColumn.appendChild(extraAddButton);// anothero ne
 
 };
 
