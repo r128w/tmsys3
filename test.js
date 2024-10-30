@@ -117,12 +117,18 @@ async function whatchuWant(element){// update the list and data, write
             newTask["description"] = "Description";
             newTask["timestamp"] = Math.floor(Date.now() / 1000);
 
-            internalData["todo"].push(newTask); // adds to bottom of tasklist
-            if(element.innerText == "^"){// swap w top
-                const first = internalData["todo"][0];
-                internalData["todo"][0] = internalData["todo"][internalData["todo"].length-1];
-                internalData["todo"][internalData["todo"].length-1] = first;
+            if(element.innerText == "+"){
+                internalData["todo"].push(newTask); // adds to bottom of tasklist
+            }else{
+                // internalData["todo"] = [newTask] + internalData["todo"];// cursed push to front
+                // console.log(internalData["todo"]);
+                internalData["todo"].unshift(newTask);
             }
+            // if(element.innerText == "^"){// swap w top
+            //     const first = internalData["todo"][0];
+            //     internalData["todo"][0] = internalData["todo"][internalData["todo"].length-1];
+            //     internalData["todo"][internalData["todo"].length-1] = first;
+            // }
             hopOutsideAGhost(internalData);
             // console.log(internalData);
             console.log(await andHopUp(internalData));
