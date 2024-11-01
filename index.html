@@ -11,24 +11,26 @@
       <style>
         .taskContainer {background-color: #111;padding:8px;margin:8px;}
 
-        .taskName {margin:0px;width:fit-content;background-color:#111;color:#fff;font-size:large;font-family:monospace;width:60%;border:none;margin-bottom:3px;}
-        .taskDescription {margin:0px;width:fit-content;background-color:#111;color:#fff;font-family:monospace;width:90%;border:none;}
-        .taskButton {float:right;margin-left:4px;background-color: #aaa;font-family:monospace;color:#000;margin-bottom:3px;}
+        .taskName {margin:0px;width:fit-content;background-color:#111;color:#fff;font-size:14px;font-weight:bold;width:60%;border:none;margin-bottom:3px;}
+        .taskDescription {margin:0px;width:fit-content;background-color:#111;color:#fff;width:90%;border:none;font-size:12px}
+        .taskButton {float:right;margin-left:4px;background-color: #aaa;;color:#000;margin-bottom:3px;}
 
         .hidden {display:none;}
+
+        .mainFont {font-family:"Lucida Console", monospace}
 
         textarea {resize:none;}
 
       </style>
 
   </head>
-  <body style = "background-color: #111; color: #fff;font-family:monospace" spellcheck="false">
+  <body style = "background-color: #111; color: #fff" spellcheck="false" class = "mainFont">
 
     <script src="./test.js"></script>
 
 
     <div style="width: 100%; text-align: center; "><!-- title, centered -->
-      <h1 style="font-family: monospace;margin-bottom:8px">TMSys3</h1>
+      <h1 style="margin-bottom:8px" class = "mainFont">TMSys3</h1>
     </div>
 
     <div id="passwordBox" contenteditable="true" onkeyup="iAintDumb()" style="margin-left:auto;margin-right:auto;margin-bottom:12px;max-width:20%;min-width: 100px;text-align: center;background-color: #151515;font-size:large">/</div>
@@ -39,13 +41,13 @@
 
         <div class="taskContainer hidden" id="sampleTodo" style="margin-bottom:0px;">
 
-          <button class="taskButton" onclick="whatchuWant(this)">x</button>
-          <button class="taskButton" onclick="whatchuWant(this)">↓</button>
-          <button class="taskButton" onclick="whatchuWant(this)">↑</button>
-          <button class="taskButton" onclick="whatchuWant(this)">Done</button>
+          <button class="taskButton mainFont" onclick="whatchuWant(this)">x</button>
+          <button class="taskButton mainFont" onclick="whatchuWant(this)">↓</button>
+          <button class="taskButton mainFont" onclick="whatchuWant(this)">↑</button>
+          <button class="taskButton mainFont" onclick="whatchuWant(this)">Done</button>
 
-          <div class="taskName" contenteditable="true" onkeyup="innaPhantom(this)">Task Name</div>
-          <div class="taskDescription" contenteditable="true" onkeyup="innaPhantom(this)">description...</div>
+          <div class="taskName mainFont" contenteditable="true" onkeyup="innaPhantom(this)">Task Name</div>
+          <div class="taskDescription mainFont" contenteditable="true" onkeyup="innaPhantom(this)">description...</div>
       
         </div>
 
@@ -58,21 +60,21 @@
       <div style="width:48%;float:right;background: #1a1a1a;padding:0px;" id="doneColumn">
         <div class="taskContainer hidden" id="sampleDone">
 
-          <button class="taskButton" onclick="whatchuWant(this)">x</button>
-          <button class="taskButton" onclick="whatchuWant(this)">↓</button>
-          <button class="taskButton" onclick="whatchuWant(this)">↑</button>
-          <button class="taskButton" onclick="whatchuWant(this)">Undo</button>
+          <button class="taskButton mainFont" onclick="whatchuWant(this)">x</button>
+          <button class="taskButton mainFont" onclick="whatchuWant(this)">↓</button>
+          <button class="taskButton mainFont" onclick="whatchuWant(this)">↑</button>
+          <button class="taskButton mainFont" onclick="whatchuWant(this)">Undo</button>
 
-          <div class="taskName" contenteditable="true" onkeyup="innaPhantom(this)">Task Name</div>
-          <div class="taskDescription" contenteditable="true" onkeyup="innaPhantom(this)">description...</div>
+          <div class="taskName mainFont" contenteditable="true" onkeyup="innaPhantom(this)">Task Name</div>
+          <div class="taskDescription mainFont" contenteditable="true" onkeyup="innaPhantom(this)">description...</div>
       
         </div>
       </div>
 
     </div>
 
-    <div style="width:150px;margin-left: auto; margin-right: auto; text-align: center;position:fixed;right:2vw;top:1vh;background-color:#181818;padding-top:8px;padding-bottom:2px;border:#aaa solid 1.5px;"> <!-- center along bottom, update button and info -->
-      <button onclick="iGotWhite()" style="background-color: #222;color:#fff;font-family:monospace">Update</button> 
+    <div style="padding:3px;margin-left: auto; margin-right: auto; text-align: center;position:fixed;right:2vw;top:1vh;background-color:#181818;padding-top:8px;padding-bottom:2px;border:#aaa solid 1.5px;"> <!-- center along bottom, update button and info -->
+      <button onclick="iGotWhite()" style="background-color: #222;color:#fff;font-family:'Lucida Console', 'Courier New', monospace">Update</button> 
       <p id="updateTimeRead" style="font-size: x-small;margin:4px;">Read: N/A ms</p>
       <p id="updateTimeWrite" style="font-size: x-small;margin:4px;">Write: N/A ms</p>
       <p id="updateTimeElapsed" style="font-size: x-small;margin:4px">Last updated: N/A ms</p>
