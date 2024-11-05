@@ -227,7 +227,7 @@ async function innaPhantom(element){//function called by the editable divs on ke
     // const startTime = Date.now();
 
     //sick one-liner
-    internalData[((element.parentNode.parentNode.id == "todoColumn") ? "todo" : "done")][Array.from(element.parentNode.parentNode.children).indexOf(element.parentNode)-1][(element.className == "taskName" ? "name" : "description")] = element.innerText;
+    internalData[((element.parentNode.parentNode.id == "todoColumn") ? "todo" : "done")][Array.from(element.parentNode.parentNode.children).indexOf(element.parentNode)-1][(element.className.contains("taskName") ? "name" : "description")] = element.innerText;
 
     // hopOutsideAGhost(internalData); // no need to run display on every edit, as each edit already edits the display
     // console.log(internalData);
