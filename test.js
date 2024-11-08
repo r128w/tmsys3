@@ -403,7 +403,7 @@ function iTakeTheyAs(element){// checklist only update function, called by butto
         {"name": "blah","description":"blah","timestamp":123}
     ], */
 
-
+    needWrite = true;
     
     var column = ((element.parentNode.parentNode.parentNode.parentNode.id == "todoColumn") ? "todo" : "done");
 
