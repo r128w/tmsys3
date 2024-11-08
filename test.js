@@ -160,7 +160,7 @@ async function whatchuWant(element){// update the list and data, write
 };
 
 const sampleChecklist = `<div class="checklist mainFont">
-            <div class="checklistName mainFont" contenteditable="true">[[[CHECKLIST NAME]]]</div>
+            <div class="checklistName mainFont" contenteditable="true" onkeyup="iTakeTheyAs(this)">[[[CHECKLIST NAME]]]</div>
             <!--[[ITEMS]]-->
             
           `;
