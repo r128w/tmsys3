@@ -362,6 +362,8 @@ function iAintDumb(){// calls read every update of the passwordBox - because rea
     //flickers if password is incorrect, but otherwise fine
 }
 
+var failedLastWrite = false;
+
 async function theyTrynaStealMyFlow(){// recurring update timer (if instantWrite == false)
     console.log("<> Write update ping");
     if(needWrite){//copied from andHopUp()
@@ -370,7 +372,10 @@ async function theyTrynaStealMyFlow(){// recurring update timer (if instantWrite
         processedPassword = processedPassword.replace("<br>", "");
         processedPassword = processedPassword.replace("\n", "");
         if(await user_global.functions.writeAll(internalData, processedPassword) != "Write successful"){
-            alert("401 - Unauthorized. Write to MongoDB unsuccessful.");
+            if(failedLastWrite == false){
+                alert("401 - Unauthorized. Write unsuccessful.");
+            }
+            failedLastWrite = true;
             console.log("Write failed. lmao");
         }else{
             needWrite = false;
@@ -378,6 +383,7 @@ async function theyTrynaStealMyFlow(){// recurring update timer (if instantWrite
             document.getElementById("updateTimeWrite").innerText = `Write: ${Date.now()-startTime} ms`;
             blowohoh();
 
+            failedLastWrite = false;
             console.log("Write success");
         }
     }else{console.log("No write");}
