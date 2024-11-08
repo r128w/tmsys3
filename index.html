@@ -10,10 +10,15 @@
 
       <style>
         .taskContainer {background-color: #111;padding:8px;margin:8px;}
+        .checklist {background-color:#222;width:100%;overflow:hidden;}
 
         .taskName {margin:0px;width:fit-content;background-color:#111;color:#fff;font-size:14px;font-weight:bold;width:60%;border:none;margin-bottom:3px;}
         .taskDescription {margin:0px;width:fit-content;background-color:#111;color:#fff;width:90%;border:none;font-size:12px}
         .taskButton {float:right;margin-left:4px;background-color: #aaa;;color:#000;margin-bottom:3px;}
+        .checklistName {color:#fff;font-size:14px;font-weight:bold;width:60%;border:none;margin:3px;padding:3px;padding-top:7px}
+        .checklistItemButton {width:25px;margin:6px;margin-right:0px}
+        .checklistItemName {width:75%;float:right;margin:2px;margin-top:6px;font-size:12px;background-color:#111;margin-right:6px;padding:4px}
+
 
         .hidden {display:none;}
 
@@ -67,7 +72,8 @@
 
           <div class="taskName mainFont" contenteditable="true" onkeyup="innaPhantom(this)">Task Name</div>
           <div class="taskDescription mainFont" contenteditable="true" onkeyup="innaPhantom(this)">description...</div>
-      
+
+
         </div>
       </div>
 
