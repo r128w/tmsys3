@@ -2,6 +2,27 @@
 
 
 var internalData;
+// formatted
+/*
+{
+    "todo": [
+        {"name": "blah","description":"blah","timestamp":123,"checklist":{
+            "name":"blah",
+            "content":[
+                {"text":"blah","completed":true},
+                {"text":"blah","completed":true},
+                {"text":"blah","completed":true},
+            ]
+        },
+        {"name": "blah","description":"blah","timestamp":123}
+    ],
+    "done": [
+        {"name": "blah","description":"blah","timestamp":123},
+        {"name": "blah","description":"blah","timestamp":123}
+    ],
+}
+
+*/
 
 const app = new Realm.App({ id: "application-0-ivhubsi"});
 const credentials = Realm.Credentials.anonymous();
@@ -138,6 +159,22 @@ async function whatchuWant(element){// update the list and data, write
 
 };
 
+const sampleChecklist = `<div class="checklist mainFont">
+            <div class="checklistName mainFont" contenteditable="true">[[[CHECKLIST NAME]]]</div>
+            <!--[[ITEMS]]-->
+            
+          `;
+const sampleChecklistItem = `
+            <div class = "checklistItem mainFont">
+              <button class="checklistItemButton" onclick="iTakeTheyAs(this)">[[[DONE]]]</button>
+              <button class="checklistItemButton" onclick="iTakeTheyAs(this)">-</button>
+              <div class="checklistItemName mainFont" contenteditable="true" onkeyup="iTakeTheyAs(this)">[[[ITEM NAME]]]</div>
+            </div>
+`;
+
+const sampleAddChecklistButton = `
+            <button class = "checklistItemButton" onclick="iTakeTheyAs(this)">+</button>`;
+
 async function hopOutsideAGhost(rawJSON){//display the json input to the webpage
 
     console.log("Displaying data");
@@ -166,6 +203,22 @@ async function hopOutsideAGhost(rawJSON){//display the json input to the webpage
         newElement.childNodes[9].innerText = rawJSON["todo"][i]["name"];
         newElement.childNodes[11].innerText = rawJSON["todo"][i]["description"];
 
+        if(rawJSON["todo"][i]["checklist"]!=null){//wait. im floated
+            // console.log(i);
+            newElement.innerHTML += sampleChecklist.replace("[[[CHECKLIST NAME]]]", rawJSON["todo"][i]["checklist"]["name"]);
+
+            for(var ii = 0; ii < rawJSON["todo"][i]["checklist"]["content"].length;ii++){
+                var newCheckItem = sampleChecklistItem;
+                newCheckItem = newCheckItem.replace("[[[ITEM NAME]]]", rawJSON["todo"][i]["checklist"]["content"][ii]["name"]);
+                // console.log(rawJSON["todo"][i]["checklist"]["content"][ii]["name"]);
+                // console.log(newCheckItem);
+                // console.log(newCheckItem.replace("[[[DONE]]]","GAY"));
+                newCheckItem = newCheckItem.replace("[[[DONE]]]", (rawJSON["todo"][i]["checklist"]["content"][ii]["completed"] ? "D" : "<br>"));
+                newElement.children[6].innerHTML+=newCheckItem;// index 6 not always guaranteed, but cest la vie
+            }
+            newElement.children[6].innerHTML+=sampleAddChecklistButton;
+        }
+
         todoColumn.appendChild(newElement);
     }
 
@@ -176,6 +229,19 @@ async function hopOutsideAGhost(rawJSON){//display the json input to the webpage
 
         newElement.childNodes[9].innerText = rawJSON["done"][i]["name"];
         newElement.childNodes[11].innerText = rawJSON["done"][i]["description"];
+
+        if(rawJSON["done"][i]["checklist"]!=null){//wait. im floated
+            // console.log(i);
+            newElement.innerHTML += sampleChecklist.replace("[[[CHECKLIST NAME]]]", rawJSON["done"][i]["checklist"]["name"]);
+
+            for(var ii = 0; ii < rawJSON["done"][i]["checklist"]["content"].length;ii++){
+                var newCheckItem = sampleChecklistItem;
+                newCheckItem.replace("[[[NAME]]]", rawJSON["done"][i]["checklist"]["content"][ii]["name"]);
+                newCheckItem.replace("[[[DONE]]]", (rawJSON["done"][i]["checklist"]["content"][ii]["completed"] ? "D" : "<br>"));
+                newElement.children[6].innerHTML+=newCheckItem;// index 6 not always guaranteed, but cest la vie
+            }
+            newElement.children[6].innerHTML+=sampleAddChecklistButton;
+        }
 
         doneColumn.appendChild(newElement);
     }
@@ -226,8 +292,23 @@ async function innaPhantom(element){//function called by the editable divs on ke
     console.log(`Write request - text input - received from ${element}`);
     // const startTime = Date.now();
 
+    
+    if(element.innerText.endsWith("[checklist]")){
+        element.innerText = element.innerText.substring(0,element.innerText.length-11);// wait. im goated
+        // console.log("woaooooh");
+        internalData[((element.parentNode.parentNode.id == "todoColumn") ? "todo" : "done")][Array.from(element.parentNode.parentNode.children).indexOf(element.parentNode)-1]["checklist"]= {
+            "name":"New Checklist",
+            "content":[{"name":"New item","completed":false}]
+        };// HOOOOLY first try. absolutely throated
+        // console.log(internalData);
+        internalData[((element.parentNode.parentNode.id == "todoColumn") ? "todo" : "done")][Array.from(element.parentNode.parentNode.children).indexOf(element.parentNode)-1][(element.className.includes("taskName") ? "name" : "description")] = element.innerText;
+        hopOutsideAGhost(internalData);
+        return;
+    }// its checklisting time
+
     //sick one-liner
     internalData[((element.parentNode.parentNode.id == "todoColumn") ? "todo" : "done")][Array.from(element.parentNode.parentNode.children).indexOf(element.parentNode)-1][(element.className.includes("taskName") ? "name" : "description")] = element.innerText;
+
 
     // hopOutsideAGhost(internalData); // no need to run display on every edit, as each edit already edits the display
     // console.log(internalData);
@@ -301,6 +382,88 @@ async function theyTrynaStealMyFlow(){// recurring update timer (if instantWrite
         }
     }else{console.log("No write");}
     setTimeout(theyTrynaStealMyFlow, 15000);// shouldnt be too resource intensive, because of the single bool check on idle
+}
+
+function iTakeTheyAs(element){// checklist only update function, called by buttons and textfields
+/*"todo": [
+        {"name": "blah","description":"blah","timestamp":123,"checklist":{
+            "name":"blah",
+            "content":[
+                {"text":"blah","completed":true},
+                {"text":"blah","completed":true},
+                {"text":"blah","completed":true},
+            ]
+        },
+        {"name": "blah","description":"blah","timestamp":123}
+    ], */
+
+
+    
+    var column = ((element.parentNode.parentNode.parentNode.parentNode.id == "todoColumn") ? "todo" : "done");
+
+    var dataIndex = Array.from(element.parentNode.parentNode.parentNode.parentNode.children).indexOf(element.parentNode.parentNode.parentNode)-1;
+    var checklistIndex = Array.from(element.parentNode.parentNode.children).indexOf(element.parentNode)-1;
+
+    if((element.innerHTML == "+" && element.nodeName == "BUTTON") || (element.nodeName == "DIV" && element.className.includes("checklistName"))){
+        column = ((element.parentNode.parentNode.parentNode.id == "todoColumn") ? "todo" : "done");
+        dataIndex = Array.from(element.parentNode.parentNode.parentNode.children).indexOf(element.parentNode.parentNode)-1;
+        // checklistIndex = Array.from(element.parentNode.children).indexOf(element.parentNode)-1;
+    }
+
+    console.log("cl update:" +column + dataIndex + "@" + checklistIndex);
+
+    if(element.nodeName == "BUTTON"){
+
+        if(element.innerHTML == "+"){
+            // add a checklist item
+            console.log(internalData);
+            internalData[column][dataIndex]["checklist"]["content"].push({"name":"New item", "completed":false});
+        }else
+        if(element.innerHTML == "-"){
+
+            //remove checklist item
+            internalData[column][dataIndex]["checklist"]["content"].splice(checklistIndex, 1);
+            
+        }else{
+            // console.log(element.innerHTML);
+
+        var checking = true;// whether or not this should be made true/false
+        // console.log("asd")
+        if(element.innerHTML == "D"){
+            // console.log("check it");
+            checking = false
+        }
+
+        if(checking){
+            element.innerHTML = "D";
+        }else{
+            element.innerHTML = "<br>";
+        }
+        // set the corresponding button & internalData entry to value in 'checking'
+
+        internalData[column][dataIndex]["checklist"]["content"][checklistIndex]["completed"] = checking;
+
+
+        }
+        hopOutsideAGhost(internalData);
+
+    }else if (element.nodeName == "DIV"){
+        if(element.className.includes("checklistName")){
+            internalData[column][dataIndex]["checklist"]["name"] = element.innerText;
+        }else if(element.className.includes("checklistItemName")){
+            internalData[column][dataIndex]["checklist"]["content"][checklistIndex]["name"] = element.innerText;
+        }
+    }
+
+    // const dataToMove = internalData[column][dataIndex];
+
+    // if(dataIndex > 0){
+    //     internalData[column][dataIndex] = internalData[column][dataIndex-1];
+    //     internalData[column][dataIndex-1] = dataToMove;
+        
+    //     hopOutsideAGhost(internalData);
+    //     console.log(await andHopUp(internalData));
+    // }
 }
 
 if(instantWrite == false){
