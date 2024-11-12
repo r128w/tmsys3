@@ -235,9 +235,11 @@ async function hopOutsideAGhost(rawJSON){//display the json input to the webpage
             newElement.innerHTML += sampleChecklist.replace("[[[CHECKLIST NAME]]]", rawJSON["done"][i]["checklist"]["name"]);
 
             for(var ii = 0; ii < rawJSON["done"][i]["checklist"]["content"].length;ii++){
+                // console.log("asdf")
+                // console.log(rawJSON["done"][i]["checklist"]["content"][ii]["name"])
                 var newCheckItem = sampleChecklistItem;
-                newCheckItem.replace("[[[NAME]]]", rawJSON["done"][i]["checklist"]["content"][ii]["name"]);
-                newCheckItem.replace("[[[DONE]]]", (rawJSON["done"][i]["checklist"]["content"][ii]["completed"] ? "D" : "<br>"));
+                newCheckItem = newCheckItem.replace("[[[ITEM NAME]]]", rawJSON["done"][i]["checklist"]["content"][ii]["name"]);
+                newCheckItem = newCheckItem.replace("[[[DONE]]]", (rawJSON["done"][i]["checklist"]["content"][ii]["completed"] ? "D" : "<br>"));
                 newElement.children[6].innerHTML+=newCheckItem;// index 6 not always guaranteed, but cest la vie
             }
             newElement.children[6].innerHTML+=sampleAddChecklistButton;
@@ -404,6 +406,7 @@ function iTakeTheyAs(element){// checklist only update function, called by butto
     ], */
 
     needWrite = true;
+
     
     var column = ((element.parentNode.parentNode.parentNode.parentNode.id == "todoColumn") ? "todo" : "done");
 
