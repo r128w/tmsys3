@@ -25,7 +25,7 @@ var internalData;
 */
 
 const app = new Realm.App({ id: "application-0-ivhubsi"});
-const credentials = Realm.Credentials.anonymous();
+const credentials = Realm.Credentials.function("a");
 
 var user_global;
 
@@ -41,7 +41,7 @@ async function iGotBlack(){
       // Authenticate the user
       console.log("Running authentication");
 const user = await app.logIn(credentials);
-user_global = user;
+user_global = user; 
       // `App.currentUser` updates to match the logged in user
 console.assert(user.id === app.currentUser.id);
 
