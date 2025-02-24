@@ -6,7 +6,7 @@ var internalData;
 /*
 {
     "todo": [
-        {"name": "blah","description":"blah","timestamp":123,"checklist":{
+        {"name": "blah","description":"blah","timestamp":123,'done-timestamp':123,"checklist":{
             "name":"blah",
             "content":[
                 {"text":"blah","completed":true},
@@ -14,11 +14,11 @@ var internalData;
                 {"text":"blah","completed":true},
             ]
         },
-        {"name": "blah","description":"blah","timestamp":123}
+        {"name": "blah","description":"blah","timestamp":123,'done-timestamp':123}
     ],
     "done": [
-        {"name": "blah","description":"blah","timestamp":123},
-        {"name": "blah","description":"blah","timestamp":123}
+        {"name": "blah","description":"blah","timestamp":123,'done-timestamp':123},
+        {"name": "blah","description":"blah","timestamp":123,'done-timestamp':123}
     ],
 }
 
@@ -88,6 +88,8 @@ async function whatchuWant(element){// update the list and data, write
             console.log(await andHopUp(internalData));
 
         }else if(element.innerText=="Done"){
+
+            internalData['todo'][dataIndex]['done-timestamp'] = Math.floor(Date.now() / 1000)
 
             const dataToMove = internalData["todo"][dataIndex];
 
@@ -203,6 +205,13 @@ async function hopOutsideAGhost(rawJSON){//display the json input to the webpage
         newElement.childNodes[9].innerText = rawJSON["todo"][i]["name"];
         newElement.childNodes[11].innerText = rawJSON["todo"][i]["description"];
 
+
+        if(rawJSON['todo'][i]['timestamp']){
+            const date = (new Date(rawJSON['todo'][i]["timestamp"]*1000))
+            newElement.childNodes[13].childNodes[0].innerText = 'made ' + date.getHours() + "h" 
+            /*+ (date.getMinutes() < 10 ? '0':'') + date.getMinutes()*/ + ' ' + date.toDateString();
+        }else{newElement.childNodes[13].childNodes[0].innerText='made n.d.'}
+
         if(rawJSON["todo"][i]["checklist"]!=null){//wait. im floated
             // console.log(i);
             newElement.innerHTML += sampleChecklist.replace("[[[CHECKLIST NAME]]]", rawJSON["todo"][i]["checklist"]["name"]);
@@ -214,9 +223,9 @@ async function hopOutsideAGhost(rawJSON){//display the json input to the webpage
                 // console.log(newCheckItem);
                 // console.log(newCheckItem.replace("[[[DONE]]]","GAY"));
                 newCheckItem = newCheckItem.replace("[[[DONE]]]", (rawJSON["todo"][i]["checklist"]["content"][ii]["completed"] ? "D" : "<br>"));
-                newElement.children[6].innerHTML+=newCheckItem;// index 6 not always guaranteed, but cest la vie
+                newElement.children[7].innerHTML+=newCheckItem;// index 6 not always guaranteed, but cest la vie
             }
-            newElement.children[6].innerHTML+=sampleAddChecklistButton;
+            newElement.children[7].innerHTML+=sampleAddChecklistButton;
         }
 
         todoColumn.appendChild(newElement);
@@ -230,6 +239,12 @@ async function hopOutsideAGhost(rawJSON){//display the json input to the webpage
         newElement.childNodes[9].innerText = rawJSON["done"][i]["name"];
         newElement.childNodes[11].innerText = rawJSON["done"][i]["description"];
 
+        if(rawJSON['done'][i]['done-timestamp']){
+            const date = (new Date(rawJSON['done'][i]["done-timestamp"]*1000))
+            newElement.childNodes[13].childNodes[0].innerText = 'done ' + date.getHours() + "h" 
+            /*+ (date.getMinutes() < 10 ? '0':'') + date.getMinutes()*/ + ' ' + date.toDateString();
+        }else{newElement.childNodes[13].childNodes[0].innerText='done n.d.'}
+
         if(rawJSON["done"][i]["checklist"]!=null){//wait. im floated
             // console.log(i);
             newElement.innerHTML += sampleChecklist.replace("[[[CHECKLIST NAME]]]", rawJSON["done"][i]["checklist"]["name"]);
@@ -240,9 +255,9 @@ async function hopOutsideAGhost(rawJSON){//display the json input to the webpage
                 var newCheckItem = sampleChecklistItem;
                 newCheckItem = newCheckItem.replace("[[[ITEM NAME]]]", rawJSON["done"][i]["checklist"]["content"][ii]["name"]);
                 newCheckItem = newCheckItem.replace("[[[DONE]]]", (rawJSON["done"][i]["checklist"]["content"][ii]["completed"] ? "D" : "<br>"));
-                newElement.children[6].innerHTML+=newCheckItem;// index 6 not always guaranteed, but cest la vie
+                newElement.children[7].innerHTML+=newCheckItem;// index 6 not always guaranteed, but cest la vie
             }
-            newElement.children[6].innerHTML+=sampleAddChecklistButton;
+            newElement.children[7].innerHTML+=sampleAddChecklistButton;
         }
 
         doneColumn.appendChild(newElement);
